@@ -44,10 +44,14 @@ router.put('/:id', validateUser, validateUserId, (req, res, next) => {
     .catch(error => next({ error }));
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', validateUserId, (req, res, next) => {
   // RETURN THE FRESHLY DELETED USER OBJECT
   // this needs a middleware to verify user id
-  res.send('unimplemented')
+  Users.remove(req.params.id)
+    .then(() => {
+      res.status(200).json(req.existingUser);
+    })
+    .catch(error => next({ error }));
 });
 
 router.get('/:id/posts', (req, res) => {
