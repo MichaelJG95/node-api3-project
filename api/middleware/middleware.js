@@ -23,6 +23,13 @@ function validateUserId(req, res, next) {
 
 function validateUser(req, res, next) {
   // DO YOUR MAGIC
+  if (typeof req.body.name !== 'string' || req.body.name.trim() === '') {
+    res.status(400).json({ message: "missing required name field" });
+    return;
+  }
+
+  req.user = { name: req.body.name.trim() };
+  next();
 }
 
 function validatePost(req, res, next) {
@@ -32,5 +39,6 @@ function validatePost(req, res, next) {
 // do not forget to expose these functions to other modules
 module.exports = {
   logger,
-  validateUserId
+  validateUserId,
+  validateUser
 }
