@@ -1,3 +1,5 @@
+const Users = require('../users/users-model.js');
+
 function logger(req, res, next) {
   // DO YOUR MAGIC
   req.timestamp = new Date();
@@ -7,6 +9,16 @@ function logger(req, res, next) {
 
 function validateUserId(req, res, next) {
   // DO YOUR MAGIC
+  Users.getById(req.params.id)
+    .then(user => {
+      if(user) {
+        req.user = user;
+        next()
+      } else {
+        res.status(404).json({ message: "user not found" })
+      }
+    })
+    .catch(error => next({ error }))
 }
 
 function validateUser(req, res, next) {
